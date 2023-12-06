@@ -16,6 +16,7 @@ export default function MicrophoneComponent() {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingComplete, setRecordingComplete] = useState(false);
   const [transcript, setTranscript] = useState("");
+  // const [data, setData] = useState("");
 
   // Reference to store the SpeechRecognition instance
   const recognitionRef = useRef<any>(null);
@@ -70,6 +71,24 @@ export default function MicrophoneComponent() {
     }
   };
 
+  const handleSubmit = async () => {
+    try {
+      console.log(transcript);
+      const response = await fetch("/api/post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ transcript }),
+      });
+
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error("Error submitting data:", error);
+    }
+  };
+
   // Render the microphone component with appropriate UI based on recording state
   return (
     <div className="flex items-center justify-center h-screen w-full">
@@ -86,6 +105,18 @@ export default function MicrophoneComponent() {
                     ? "Thanks for talking."
                     : "Start speaking..."}
                 </p>
+                {recordingComplete ? (
+                  <>
+                    <input
+                      type="text"
+                      value={transcript}
+                      onChange={(e) => setTranscript(e.target.value)}
+                    />
+                    <button onClick={handleSubmit}>Submit</button>
+                  </>
+                ) : (
+                  ""
+                )}
               </div>
               {isRecording && (
                 <div className="rounded-full w-4 h-4 bg-red-400 animate-pulse" />
@@ -94,6 +125,11 @@ export default function MicrophoneComponent() {
 
             {transcript && (
               <div className="border rounded-md p-2 h-fullm mt-4">
+                <input
+                  type="text"
+                  value={transcript}
+                  onChange={(e) => setTranscript(e.target.value)}
+                />
                 <p className="mb-0">{transcript}</p>
               </div>
             )}
