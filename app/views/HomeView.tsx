@@ -83,6 +83,8 @@ export default function MicrophoneComponent() {
       });
 
       const result = await response.json();
+      alert("Success Insert Data");
+      window.location.reload();
       console.log(result);
     } catch (error) {
       console.error("Error submitting data:", error);
@@ -112,7 +114,12 @@ export default function MicrophoneComponent() {
                       value={transcript}
                       onChange={(e) => setTranscript(e.target.value)}
                     />
-                    <button onClick={handleSubmit}>Submit</button>
+                    <button
+                      onClick={handleSubmit}
+                      className="bg-indigo-50 rounded-lg"
+                    >
+                      Submit
+                    </button>
                   </>
                 ) : (
                   ""
@@ -125,11 +132,6 @@ export default function MicrophoneComponent() {
 
             {transcript && (
               <div className="border rounded-md p-2 h-fullm mt-4">
-                <input
-                  type="text"
-                  value={transcript}
-                  onChange={(e) => setTranscript(e.target.value)}
-                />
                 <p className="mb-0">{transcript}</p>
               </div>
             )}
